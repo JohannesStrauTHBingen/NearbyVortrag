@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        super.onStart();
+        mGoogleApiClient.connect();
 
     }
 
@@ -52,10 +54,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        if(mGoogleApiClient.isConnected()){
             mGoogleApiClient.disconnect();
         }
+        super.onStop();
     }
 
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
