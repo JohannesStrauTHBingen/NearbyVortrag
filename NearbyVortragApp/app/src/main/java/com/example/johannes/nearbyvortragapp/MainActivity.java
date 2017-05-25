@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -22,7 +23,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     GoogleApiClient mGoogleApiClient;
     Message mActiveMessage;
@@ -114,11 +115,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void addItemToListView(String item) {
         listItems.add(item);
         adapter.notifyDataSetChanged();
+        Toast.makeText(this, "found: "+item, Toast.LENGTH_LONG);
     }
 
     public void removeItemFromListView(String item){
         listItems.remove(item);
         adapter.notifyDataSetChanged();
+        Toast.makeText(this, "removed: "+item, Toast.LENGTH_LONG);
     }
 
     @Override
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        Toast.makeText(this, "Connected to API Client", Toast.LENGTH_LONG);
     }
 
     @Override
@@ -155,15 +159,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void publish(String message) {
+        unpublish();
         Log.i("PUB", "Publishing message: " + message);
         mActiveMessage = new Message(message.getBytes());
         Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
+        Toast.makeText(this, "Published message: "+message, Toast.LENGTH_LONG);
     }
 
     private void unpublish() {
         Log.i("UNPUB", "Unpublishing.");
         if (mActiveMessage != null) {
             Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
+            Toast.makeText(this, "Unpublished message: "+mActiveMessage.toString(), Toast.LENGTH_LONG);
             mActiveMessage = null;
         }
     }
@@ -171,10 +178,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private void subscribe() {
         Log.i("SUB", "Subscribing.");
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener);
+        Toast.makeText(this, "Subscribed", Toast.LENGTH_LONG);
     }
 
     private void unsubscribe() {
         Log.i("UNSUB", "Unsubscribing.");
         Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
+        Toast.makeText(this, "Unsubscribed", Toast.LENGTH_LONG);
     }
+
 }
