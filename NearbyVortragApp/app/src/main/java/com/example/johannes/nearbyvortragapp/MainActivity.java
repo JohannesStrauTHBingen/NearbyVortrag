@@ -1,8 +1,5 @@
 package com.example.johannes.nearbyvortragapp;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -115,13 +112,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void addItemToListView(String item) {
         listItems.add(item);
         adapter.notifyDataSetChanged();
-        Toast.makeText(this, "found: "+item, Toast.LENGTH_LONG);
+        Toast.makeText(this, "found: "+item, Toast.LENGTH_LONG).show();
     }
 
     public void removeItemFromListView(String item){
         listItems.remove(item);
         adapter.notifyDataSetChanged();
-        Toast.makeText(this, "removed: "+item, Toast.LENGTH_LONG);
+        Toast.makeText(this, "removed: "+item, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -147,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-        Toast.makeText(this, "Connected to API Client", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Connected to API Client", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -163,28 +160,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.i("PUB", "Publishing message: " + message);
         mActiveMessage = new Message(message.getBytes());
         Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
-        Toast.makeText(this, "Published message: "+message, Toast.LENGTH_LONG);
+        Toast.makeText(this, "Published message: "+message, Toast.LENGTH_LONG).show();
     }
 
     private void unpublish() {
-        Log.i("UNPUB", "Unpublishing.");
+
         if (mActiveMessage != null) {
+            Log.i("UNPUB", "Unpublishing.");
             Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
-            Toast.makeText(this, "Unpublished message: "+mActiveMessage.toString(), Toast.LENGTH_LONG);
+            Toast.makeText(this, "Unpublished message: "+mActiveMessage.toString(), Toast.LENGTH_LONG).show();
             mActiveMessage = null;
+        } else {
+            Toast.makeText(this, "No message to unpublish.", Toast.LENGTH_LONG).show();
         }
     }
 
     private void subscribe() {
         Log.i("SUB", "Subscribing.");
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener);
-        Toast.makeText(this, "Subscribed", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Subscribed", Toast.LENGTH_LONG).show();
     }
 
     private void unsubscribe() {
         Log.i("UNSUB", "Unsubscribing.");
         Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
-        Toast.makeText(this, "Unsubscribed", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Unsubscribed", Toast.LENGTH_LONG).show();
     }
 
 }
